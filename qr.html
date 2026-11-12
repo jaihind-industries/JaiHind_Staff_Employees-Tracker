@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JaiHind Industries | QR Codes</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="qr-top">JAIHIND INDUSTRIES</div>
+<main class="qr-wrap">
+  <div class="qr-actions">
+    <button class="btn" type="button" id="dlIn">Download CLOCK IN image</button>
+    <button class="btn teal" type="button" id="dlOut">Download CLOCK OUT image</button>
+    <button class="btn ghost" type="button" onclick="window.print()">Print</button>
+  </div>
+  <p class="qnote hint" id="warn" style="margin-bottom:16px"></p>
+  <div class="qr-cards">
+    <div class="qcard" style="--c:#1f7a3a"><small>JAIHIND INDUSTRIES</small><h1>CLOCK IN</h1><div class="qr" id="qrIn"></div><small>Scan when you arrive</small></div>
+    <div class="qcard" style="--c:#1e4c5c"><small>JAIHIND INDUSTRIES</small><h1>CLOCK OUT</h1><div class="qr" id="qrOut"></div><small>Scan when you leave</small></div>
+  </div>
+</main>
+<script src="qr.js"></script>
+</body>
+</html>

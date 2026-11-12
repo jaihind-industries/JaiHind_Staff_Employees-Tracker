@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1e4c5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>JaiHind Industries | Attendance Portal</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Loading -->
+<div id="screenLoad" class="loader"><div class="spin"></div><div>Please wait…</div></div>
+
+<!-- Sign in -->
+<div id="screenLogin" class="auth" hidden>
+  <aside class="auth-brand">
+    <img src="logo-white.svg" alt="JaiHind Industries logo">
+    <h1>JAIHIND</h1>
+    <div class="sub">INDUSTRIES</div>
+    <p class="tag">Attendance, permission and expense management for our team.</p>
+  </aside>
+  <section class="auth-panel">
+    <form class="auth-box" id="loginForm" novalidate>
+      <h2>Sign in</h2>
+      <p class="lead">Enter your registered mobile number.</p>
+      <label for="phone">Mobile number</label>
+      <div class="phone">
+        <span class="cc">+91</span>
+        <input id="phone" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="tel-national" placeholder="10-digit number" aria-describedby="loginErr">
+      </div>
+      <div id="loginErr" class="err" role="alert"></div>
+      <button id="loginBtn" class="btn" type="submit" disabled>Continue</button>
+      <p class="auth-foot">&copy; JaiHind Industries</p>
+    </form>
+  </section>
+</div>
+
+<!-- Clock In / Out (opens after scanning the QR code) -->
+<div id="screenFlow" hidden>
+  <header class="topbar"><img src="logo-white.svg" alt=""><div><div class="t1">JAIHIND</div><div class="t2">INDUSTRIES</div></div></header>
+  <main class="shell">
+    <div class="card">
+      <div class="flow-head"><span id="flowBadge" class="badge">IN</span><h2 id="flowTitle">Clock In</h2></div>
+      <p class="who" id="flowName"></p>
+      <div class="steps"><div class="step on" id="st1">1. Camera &amp; location</div><div class="step" id="st2">2. Photo</div><div class="step" id="st3">3. Submit</div></div>
+
+      <button id="btnStart" class="btn teal" type="button">Open camera &amp; location</button>
+      <div id="gpsInfo" class="msg info" hidden></div>
+      <div id="camWrap" class="cam" hidden><video id="video" autoplay playsinline muted></video></div>
+      <button id="btnShot" class="btn teal" type="button" hidden>Take photo</button>
+      <div id="prevWrap" class="cam" hidden><img id="preview" alt="Your photo"></div>
+      <div id="sizeInfo" class="msg info" hidden></div>
+      <div class="row2"><button id="btnRetake" class="btn ghost" type="button" hidden>Retake</button><button id="btnSubmit" class="btn ok" type="button" hidden>Submit</button></div>
+      <div id="flowMsg"></div>
+      <button id="btnCancel" class="btn ghost sm" type="button">Cancel and exit</button>
+    </div>
+  </main>
+</div>
+
+<!-- Finished -->
+<div id="screenDone" class="done" hidden>
+  <div class="done-card">
+    <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#1f7a3a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2 id="doneTitle">Clock In recorded</h2>
+    <p class="who2" id="doneName"></p>
+    <p class="when" id="doneWhen"></p>
+    <p class="count" id="doneCount"></p>
+    <button id="btnClose" class="btn" type="button">Close</button>
+  </div>
+</div>
+
+<!-- Dashboard (opened without scanning a QR) -->
+<div id="screenDash" hidden>
+  <header class="topbar"><img src="logo-white.svg" alt=""><div><div class="t1">JAIHIND</div><div class="t2">INDUSTRIES</div></div>
+    <div class="right"><button class="linkbtn" id="btnLogout" type="button">Sign out</button></div></header>
+  <main class="shell">
+    <div class="profile"><div class="avatar" id="avatar"></div><div><div class="n" id="dName"></div><div class="r" id="dRole"></div></div></div>
+
+    <div class="tabs" id="tabs">
+      <button type="button" data-t="att" class="on">Attendance</button>
+      <button type="button" data-t="per">Permission</button>
+      <button type="button" data-t="exp">Expense</button>
+      <button type="button" data-t="adm" id="admTab" hidden>Approvals</button>
+    </div>
+
+    <section id="t-att">
+      <div class="card">
+        <h2>Clock in / Clock out</h2>
+        <p class="desc">Scan the <b>CLOCK IN</b> QR code when you arrive and the <b>CLOCK OUT</b> QR code when you leave, using your phone camera.</p>
+      </div>
+      <div class="card"><h2>Recent attendance</h2><div class="tbl"><table id="attTbl"></table></div></div>
+    </section>
+
+    <section id="t-per" hidden>
+      <div class="card">
+        <h2>Request permission</h2>
+        <label for="pDate">Date</label><input id="pDate" type="date">
+        <div class="row2"><div><label for="pFrom">From</label><input id="pFrom" type="time"></div><div><label for="pTo">To</label><input id="pTo" type="time"></div></div>
+        <label for="pReason">Reason</label><textarea id="pReason" rows="3"></textarea>
+        <button class="btn" type="button" id="btnPerm">Send request</button><div id="pMsg"></div>
+      </div>
+      <div class="card"><h2>My requests</h2><div class="tbl"><table id="perTbl"></table></div></div>
+    </section>
+
+    <section id="t-exp" hidden>
+      <div class="card">
+        <h2>Add expense</h2>
+        <label for="eDate">Date</label><input id="eDate" type="date">
+        <label for="eCat">Category</label><select id="eCat"><option>Travel</option><option>Food</option><option>Fuel</option><option>Material</option><option>Courier</option><option>Other</option></select>
+        <label for="eAmt">Amount (₹)</label><input id="eAmt" type="number" inputmode="decimal" min="0">
+        <label for="eDesc">Description</label><input id="eDesc" type="text">
+        <label for="eFile">Bill photo (optional)</label><input id="eFile" type="file" accept="image/*">
+        <div id="eSize" class="msg info" hidden></div>
+        <button class="btn" type="button" id="btnExp">Submit expense</button><div id="eMsg"></div>
+      </div>
+      <div class="card"><h2>My expenses</h2><div class="tbl"><table id="expTbl"></table></div></div>
+    </section>
+
+    <section id="t-adm" hidden>
+      <div class="card"><h2>Pending permissions</h2><div id="admPer"></div></div>
+      <div class="card"><h2>Pending expenses</h2><div id="admExp"></div></div>
+    </section>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
